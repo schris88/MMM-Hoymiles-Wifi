@@ -3,6 +3,7 @@ MagicMirror module for external web widgets
 
 - This module shows current data for Hoymiles Wifi inverter with the help of the hoymiles-wifi python lib
 - Project is based on https://github.com/ulrichwisser/MMM-HTMLSnippet
+- The Inverter Data is fetched with https://github.com/suaveolent/hoymiles-wifi
 - Whenever the widget refreshes the flask server will call the python script which will render a html with the current data from holymiles-wifi
 
 ## Installation
