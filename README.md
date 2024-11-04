@@ -28,7 +28,7 @@ git clone https://github.com/stengelchristian/MMM-Hoymiles.git
 },
 
 ### Hoymiles Example
-![Hoymiles Example](mmm-hoymiles.jpg)
+![Hoymiles Example](./mmm-hoymiles.jpg)
 
 ## Requirements
 Install all Python requirements:
