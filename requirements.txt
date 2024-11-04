@@ -1,0 +1,4 @@
+Flask
+hoymiles-wifi
+plotly
+jinja2
