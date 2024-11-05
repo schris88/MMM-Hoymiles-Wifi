@@ -16,7 +16,7 @@ git clone https://github.com/schris88/MMM-Hoymiles-Wifi
 
 ```javascript
 {
-  module: "MMM-HTMLSnippet",
+  module: "MMM-Hoymiles-Wifi",
   position: "top_left",
   config: {
     width: "180px",
