@@ -1,10 +1,10 @@
 /* Magic Mirror
- * Module: MMM-HTMLSnippet
+ * Module: MMM-Hoymiles-Wifi
  *
  * By ulrichwisser
  */
 
-Module.register("MMM-HTMLSnippet", {
+Module.register("MMM-Hoymiles-Wifi", {
 
     start: function() {
         // send config to node helper
@@ -41,8 +41,8 @@ Module.register("MMM-HTMLSnippet", {
 
             // initialize iframe
             var iframe = document.createElement("iframe")
-            iframe.id = "HTMLSNIPPET-" + this.config.ident + "-" + i;
-            iframe.className = "htmlsnippet module";
+            iframe.id = "HOYMILES-" + this.config.ident + "-" + i;
+            iframe.className = "hoymiles module";
             iframe.style.width = this.config.width;
             iframe.style.height = this.config.height;
             iframe.style.border = "none";
@@ -68,7 +68,7 @@ Module.register("MMM-HTMLSnippet", {
     },
 
     suspend: function() {
-        var doms = document.getElementsByClassName("htmlsnippet")
+        var doms = document.getElementsByClassName("hoymiles")
         if (doms.length > 0) {
             for (let dom of doms) {
                 dom.style.display = "none"
@@ -77,7 +77,7 @@ Module.register("MMM-HTMLSnippet", {
     },
 
     resume: function() {
-        var doms = document.getElementsByClassName("htmlsnippet")
+        var doms = document.getElementsByClassName("hoymiles")
         if (doms.length > 0) {
             for (let dom of doms) {
                 dom.style.display = "block"
