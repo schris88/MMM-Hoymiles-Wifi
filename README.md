@@ -9,7 +9,7 @@ MagicMirror module for external web widgets
 ## Installation
 ```shell
 cd ~/MagicMirror/modules/
-git clone https://github.com/stengelchristian/MMM-Hoymiles.git
+git clone https://github.com/schris88/MMM-Hoymiles-Wifi
 ```
 
 ### Config example
@@ -47,5 +47,6 @@ To start `update.sh` manually:
 To add `update.sh` to pm2:
 ```shell
 pm2 start update.sh
+pm2 save
 ```
 
