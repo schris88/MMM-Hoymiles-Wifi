@@ -13,7 +13,7 @@ module.exports = NodeHelper.create({
             for (var i = 0; i < payload.frames.length; i++) {
                 if (payload.frames[i].html !== undefined) {
                     var index = i // conserve value in local variable, needed for enclosure to work
-                    this.expressApp.get("/HTMLSNIPPET-" + payload.ident + "-" + index, (req, res) => {
+                    this.expressApp.get("/HOYMILES-" + payload.ident + "-" + index, (req, res) => {
 						res.status(200).send(payload.frames[index].html); });
                 }
             }
