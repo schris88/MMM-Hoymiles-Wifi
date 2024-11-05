@@ -38,15 +38,15 @@ Install all Python requirements:
 pip install -r requirements.txt
 ```
 
-## Start update.sh or add it to pm2
-To start `update.sh` manually:
+## Start Flask server by running HoymilesWifi.sh or add it to pm2
+To start `HoymilesWifi.sh` manually:
 ```shell
-./update.sh
+./HoymilesWifi.sh
 ```
 
 To add `update.sh` to pm2:
 ```shell
-pm2 start update.sh
+pm2 start HoymilesWifi.sh
 pm2 save
 ```
 
