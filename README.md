@@ -19,8 +19,8 @@ git clone https://github.com/schris88/MMM-Hoymiles-Wifi
   module: "MMM-Hoymiles-Wifi",
   position: "top_left",
   config: {
-    width: "180px",
-    height: "100px",
+    width: "300px",
+    height: "320px",
     updateInterval: 60000, // in milli seconds
     frames : [
       { src: 'http://127.0.0.1:5000' },
