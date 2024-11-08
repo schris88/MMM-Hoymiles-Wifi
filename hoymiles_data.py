@@ -43,22 +43,23 @@ async def get_dtu_data():
             domain={'x': [0.3, 0.5], 'y': [0.65, 0.75]}  # Adjust vertical positioning
         ))
 
+        # Add additional trace for energy daily
+        fig.add_trace(go.Indicator(
+            mode="number",
+            value=energy_daily,
+            title={'text': "Heute", 'font': {'color': 'white', 'size': 16}},
+            number={'suffix': " Wh", 'font': {'size': 12}},
+            domain={'x': [0.2, 0.4], 'y': [0.65, 0.75]}  # Adjust vertical positioning
+        ))
+
         # Add additional trace for energy total
         fig.add_trace(go.Indicator(
             mode="number",
             value=energy_total,
             title={'text': "Gesamt", 'font': {'color': 'white', 'size': 16}},
             number={'suffix': " Wh", 'font': {'size': 12}},
-            domain={'x': [0.5, 0.7], 'y': [0.65, 0.75]}  # Adjust vertical positioning
+            domain={'x': [0.6, 0.8], 'y': [0.65, 0.75]}  # Adjust vertical positioning
         ))
-
-        # Update layout
-        fig.update_layout(
-            paper_bgcolor="rgba(0,0,0,0)",
-            plot_bgcolor="rgba(0,0,0,0)",
-            font={'color': "white", 'family': "Arial"},
-            margin=dict(t=50, b=0, l=0, r=0)  # Small margins around the plot
-        )
 
         # Save the gauge graphic as an HTML div
         gauge_html = fig.to_html(full_html=False)
