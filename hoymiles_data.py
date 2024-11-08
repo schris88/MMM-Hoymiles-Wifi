@@ -25,10 +25,9 @@ async def get_dtu_data():
         fig = go.Figure(go.Indicator(
             mode="gauge+number",
             value=power,
-            title={'text': "Power (W)", 'font': {'color': 'white', 'size': 15}},
-            number={'valueformat': '.1f', 'font': {'size': 24}},  # Format the number to one decimal place
+            number={'suffix': " W",'valueformat': '.1f', 'font': {'size': 24}},  # Format the number to one decimal place
             gauge={'axis': {'range': [0, 420], 'tickcolor': 'white', 'tickfont': {'color': 'white'}},
-                   'bar': {'color': 'white'},
+                   'bar': {'color': 'blue'},
                    'bgcolor': 'black',
                    'borderwidth': 2,
                    'bordercolor': 'white'},
@@ -39,18 +38,18 @@ async def get_dtu_data():
         fig.add_trace(go.Indicator(
             mode="number",
             value=energy_daily,
-            title={'text': "Heute", 'font': {'color': 'white', 'size': 15}},
+            title={'text': "Heute", 'font': {'color': 'white', 'size': 16}},
             number={'suffix': " Wh", 'font': {'size': 12}},
-            domain={'x': [0, 1], 'y': [0.6, 0.7]}  # Adjust vertical positioning
+            domain={'x': [0.3, 0.5], 'y': [0.65, 0.75]}  # Adjust vertical positioning
         ))
 
         # Add additional trace for energy total
         fig.add_trace(go.Indicator(
             mode="number",
             value=energy_total,
-            title={'text': "Gesamt", 'font': {'color': 'white', 'size': 15}},
+            title={'text': "Gesamt", 'font': {'color': 'white', 'size': 16}},
             number={'suffix': " Wh", 'font': {'size': 12}},
-            domain={'x': [0, 1], 'y': [0.5, 0.6]}  # Adjust vertical positioning
+            domain={'x': [0.5, 0.7], 'y': [0.65, 0.75]}  # Adjust vertical positioning
         ))
 
         # Update layout
@@ -72,9 +71,6 @@ async def get_dtu_data():
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>DTU Data</title>
-            <style>
-              
-            </style>
         </head>
         <body>
             <div>
