@@ -1,4 +1,11 @@
 # MMM-Hoymiles
+
+TODO:
+- get rid of external shell script
+- change pv_data to dtu date for combined output of inverter
+- add config options for DTU IP, PV-Power Range, Positioning, Size, Colors...
+- add template if inverter is offline (currently only displays a text)
+
 MagicMirror module for external web widgets
 
 - This module shows current data for Hoymiles Wifi inverter with the help of the hoymiles-wifi python lib
