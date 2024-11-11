@@ -38,6 +38,13 @@ Install all Python requirements:
 pip install -r requirements.txt
 ```
 
+Change IP Address in data file:
+```shell
+~/MagicMirror/modules/MMM-Hoymiles-Wifi/hoymiles_data.py
+Change this line to the address of your DTU:
+dtu = DTU(“192.168.178.114”)
+```
+
 ## Start Flask server by running HoymilesWifi.sh or add it to pm2
 To start `HoymilesWifi.sh` manually:
 ```shell
