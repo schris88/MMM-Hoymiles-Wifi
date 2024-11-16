@@ -23,16 +23,26 @@ Test environment:
 - add template if inverter is offline (currently only displays a text)
 
 ## Installation
-Installation can be done using the original repository or the develop repository.
+Installation can be done using the original repository **or** the develop repository.
 ### Main master repository:
+Clone the repository:
 ```shell
 cd ~/MagicMirror/modules/
 git clone https://github.com/schris88/MMM-Hoymiles-Wifi
 ```
-### Main develop repository:
+Make `HoymilesWifi.sh` executable:
+```shell
+chmod +x ~/MagicMirror/modules/MMM-Hoymiles-Wifi/HoymilesWifi.sh
+```
+### Main develop repository (to be used with caution):
+Clone the repository:
 ```shell
 cd ~/MagicMirror/modules/
 git clone https://github.com/evroom/MMM-Hoymiles-Wifi
+```
+Make `HoymilesWifi.sh` executable:
+```shell
+chmod +x ~/MagicMirror/modules/MMM-Hoymiles-Wifi/HoymilesWifi.sh
 ```
 ### Config Example
 Edit the file `~/MagicMirror/config/config.js` to add or modify the module.
@@ -69,6 +79,10 @@ python -m pip install -r requirements.txt --break-system-packages
 ```
 
 ## Enter DTU IP address of DTU
+Change directory:
+```shell
+cd ~/MagicMirror/modules/MMM-Hoymiles-Wifi
+```
 Use you favorite editor to make the change (here nano).
 ```shell
 nano HoymilesWifi.sh
