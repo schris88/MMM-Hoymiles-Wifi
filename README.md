@@ -127,5 +127,7 @@ python hoymiles_data.py --dtu_ip_address <DTU_HOST_IP> --debug --test
 Where `<DTU_HOST_IP>` is the IP address of the DTU.
 
 The test dataset is taken from `response_test_data.json`.
-Do not forget to remove `--test` after testing.
+You can edit this file and replace it with your own data, for example using the output of this command:
+`hoymiles-wifi --host <DTU_HOST_IP> get-real-data-new --as-json`
 
+Do not forget to remove `--test` after testing.

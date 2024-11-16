@@ -202,7 +202,7 @@ async def get_dtu_data():
         response = await dtu.async_get_real_data_new()
 
         if args.debug: print(f"DTU Response:")
-        if args.debug: print(f"{json.dumps(response, indent=2)}")
+        if args.debug: print(f"{response}")
 
         if response:
             # Panel 1 (pv_data[0])
