@@ -1,0 +1,47 @@
+{
+  "deviceSerialNumber": "414393419999",
+  "timestamp": 1731749175,
+  "activePower": 1,
+  "firmwareVersion": 1,
+  "sgsData": [
+    {
+      "serialNumber": "22070012479999",
+      "firmwareVersion": 1,
+      "voltage": 2343,
+      "frequency": 5001,
+      "activePower": 1513,
+      "reactivePower": 86,
+      "current": 67,
+      "powerFactor": 998,
+      "temperature": 93,
+      "warningNumber": 4,
+      "crcChecksum": 28864,
+      "linkStatus": 1,
+      "modulationIndexSignal": 983288
+    }
+  ],
+  "pvData": [
+    {
+      "serialNumber": "22070012479999",
+      "portNumber": 1,
+      "voltage": 276,
+      "current": 8,
+      "power": 22,
+      "energyTotal": 27032,
+      "energyDaily": 1,
+      "errorCode": 50921472
+    },
+    {
+      "serialNumber": "22070012479999",
+      "portNumber": 2,
+      "voltage": 345,
+      "current": 456,
+      "power": 1575,
+      "energyTotal": 32184,
+      "energyDaily": 101,
+      "errorCode": 50331648
+    }
+  ],
+  "dtuPower": "1513",
+  "dtuDailyEnergy": "102"
+}
