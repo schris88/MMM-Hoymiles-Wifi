@@ -11,7 +11,7 @@ This module is still under development.<br>
 It might not work, can show incorrect results, will lack some counters, etc.
 
 Test environment:
-- Micro Inverter: Hoymiles HMS-800W-2T with 2 panels connected
+- Micro Inverter: Hoymiles HMS-800W-2T and HMS-400W-2T with 2 panels connected
 - MagicMirror version: 2.30.0-develop
 - Raspberry Pi 4 Model B Rev 1.5
 - Raspbian GNU/Linux 12 (bookworm)
