@@ -123,6 +123,11 @@ def parse_dtu_data(testDataFile):
         ##          pvData == pv_data
         ##          portNumber = port_number
         ##          etc.
+
+        ## Retrieve all or most data from the response.
+        ## This allows for additional gauges and/or counters in the future.
+        ## try & except is being used to make sure there a value set in order to avoid errors.
+        ## And sometimes a certain name / value pair is not present all the time, so this will prevent errors.
         try:
             port_number_0 = int(response['pvData'][0]['portNumber'])
         except KeyError:
