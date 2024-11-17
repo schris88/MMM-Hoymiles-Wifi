@@ -20,7 +20,7 @@ Test environment:
 - get rid of external shell script
 - change pv_data to dtu date for combined output of inverter
 - add config options for DTU IP, PV-Power Range, Positioning, Size, Colors...
-- add template if inverter is offline (currently only displays a text)
+- ~~add template if inverter is offline (currently only displays a text)~~
 
 ## Installation
 Installation can be done using the original repository **or** the develop repository.
