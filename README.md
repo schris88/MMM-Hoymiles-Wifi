@@ -89,13 +89,13 @@ nano HoymilesWifi.sh
 ```
 Line to edit:
 ```
-python hoymiles_data.py --dtu_ip_address <DTU_HOST_IP>
+python hoymiles_data.py --dtu_ip_address <DTU_HOST_IP> --max <MAX PV WATTAGE ex. 800>
 ```
 Where `<DTU_HOST_IP>` is the IP address of the DTU.
 
-To turn on debugging:
+To turn on testing:
 ```
-python hoymiles_data.py --dtu_ip_address <DTU_HOST_IP> --debug
+python hoymiles_data.py --dtu_ip_address <DTU_HOST_IP> --test
 ```
 ## Start Flask server by running HoymilesWifi.sh or add it to pm2
 To start `HoymilesWifi.sh` manually:
@@ -134,9 +134,9 @@ Use you favorite editor to make the change (here nano).
 ```shell
 nano HoymilesWifi.sh
 ```
-Line to edit (add --debug --test):
+Line to edit (add --test):
 ```
-python hoymiles_data.py --dtu_ip_address <DTU_HOST_IP> --debug --test
+python hoymiles_data.py --dtu_ip_address <DTU_HOST_IP> --max <MAX PV WATTAGE ex. 800> --test
 ```
 Where `<DTU_HOST_IP>` is the IP address of the DTU.
 

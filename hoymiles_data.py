@@ -15,16 +15,12 @@ from jinja2 import Template
 parser = argparse.ArgumentParser(
     prog = 'hoymiles_data.py',
     description = 'Get data from Hoymiles inverter'
-    )
-parser.add_argument('--dtu_ip_address', default = '', type=ip_address, required=True, help = "where DTU-IP-ADDRESS has the format aaa.bbb.ccc.ddd")
-parser.add_argument('--debug', action = "store_true", default=False, required=False, help = "turn on debugging")
+)
+parser.add_argument('--dtu_ip_address', default = '192.168.178.123', type=ip_address, required=True, help = "where DTU-IP-ADDRESS has the format aaa.bbb.ccc.ddd")
+parser.add_argument('--max', default = '100', type=int , required=True, help = "Max power your gauge should show")
 parser.add_argument('--test', action = "store_true", default=False, required=False, help = "use a test dataset")
 
 args = parser.parse_args()
-if args.dtu_ip_address:
-    dtuIpAddress = str(args.dtu_ip_address)
-else:
-    dtuIpAddress = ''
 
 ####################
 # ***** VARS ***** #
@@ -42,9 +38,8 @@ def createGaugeGraphic(power, energy_total, energy_daily):
     fig = go.Figure(go.Indicator(
         mode="gauge+number",
         value=power,
-        title={'text': "Power (W)", 'font': {'color': 'white', 'size': 16}},
         number={'suffix': " W",'valueformat': '.1f', 'font': {'size': 24}}, # Format the number to one decimal place
-        gauge={'axis': {'range': [0, 800], 'tickcolor': 'white', 'tickfont': {'color': 'white'}},
+        gauge={'axis': {'range': [0, args.max], 'tickcolor': 'white', 'tickfont': {'color': 'white'}},
                'bar': {'color': 'white'},
                'bgcolor': 'black',
                'borderwidth': 2,
@@ -100,151 +95,50 @@ def createGaugeGraphic(power, energy_total, energy_daily):
 
     return (template, gauge_html)
 
-def parse_dtu_data(testDataFile):
-    response = ''
-    (def_result, power, energy_total, energy_daily) = (0, 0, 0, 0)
-    try:
-        with open(testDataFile, 'r') as file:
-            try:
-                response = json.load(file)
-            except (IOError, OSError):
-                print('ERROR: Cannot open file response_test_data.json')
-    except (FileNotFoundError, PermissionError, OSError):
-        print('ERROR: Cannot open file response_test_data.json')
-
-    # Print the response to the console
-    print(f"DTU Response:")
-    print(f"{json.dumps(response, indent=2)}")
-
-    if response:
-        ## !! NOTE: the output from the hoymiles-wifi command
-        ##          is different that from the Python dtu.async_get_real_data_new() call
-        ##          sgData == sgs_data
-        ##          pvData == pv_data
-        ##          portNumber = port_number
-        ##          etc.
-
-        ## Retrieve all or most data from the response.
-        ## This allows for additional gauges and/or counters in the future.
-        ## try & except is being used to make sure there a value set in order to avoid errors.
-        ## And sometimes a certain name / value pair is not present all the time, so this will prevent errors.
-        try:
-            port_number_0 = int(response['pvData'][0]['portNumber'])
-        except KeyError:
-            port_number_0 = 0
-        try:
-            power_0 = int(response['pvData'][0]['power']) / 10
-        except KeyError:
-            power_0 = 0
-        try:
-            energy_total_0 = int(response['pvData'][0]['energyTotal'])
-        except KeyError:
-            energy_total_0 = 0
-        try:
-            energy_daily_0 = int(response['pvData'][0]['energyDaily'])
-        except KeyError:
-            energy_daily_0 = 0
-        try:
-            current_0 = int(response['pvData'][0]['current']) / 10
-        except KeyError:
-            current_0 = 0
-        try:
-            port_number_1 = int(response['pvData'][1]['portNumber'])
-        except KeyError:
-            port_number_1 = 0
-        try:
-            power_1 = int(response['pvData'][1]['power']) / 10
-        except KeyError:
-            power_1 = 0
-        try:
-            energy_total_1 = int(response['pvData'][1]['energyTotal'])
-        except KeyError:
-            energy_total_1 = 0
-        try:
-            energy_daily_1 = int(response['pvData'][1]['energyDaily'])
-        except KeyError:
-            energy_daily_1 = 0
-        try:
-            current_1 = int(response['pvData'][1]['current']) / 10
-        except KeyError:
-            current_1 = 0
-    else:
-        # Unable to get response!
-        port_number_0 = 0
-        power_0 = 0
-        energy_total_0 = 0
-        energy_daily_0 = 0
-        current_0 = 0
-        port_number_1 = 0
-        power_1 = 0
-        energy_total_1 = 0
-        energy_daily_1 = 0
-        current_1 = 0
-
-    print(f"port_number_0: {port_number_0}")
-    print(f"power_0: {power_0}")
-    print(f"energy_total_0: {energy_total_0}")
-    print(f"energy_daily_0: {energy_daily_0}")
-    print(f"current_0: {current_0}")
-    print(f"port_number_1: {port_number_1}")
-    print(f"power_1: {power_1}")
-    print(f"energy_total_1: {energy_total_1}")
-    print(f"energy_daily_1: {energy_daily_1}")
-    print(f"current_1: {current_1}")
-
-    power = power_0 + power_1
-    energy_total = energy_total_0 + energy_total_1
-    energy_daily = energy_daily_0 + energy_daily_1
-    print(f"power: {power}")
-    print(f"energy_total: {energy_total}")
-    print(f"energy_daily: {energy_daily}")
-
-    return (def_result, power, energy_total, energy_daily)
-
 async def get_dtu_data():
+    # Get data from the DTU
     if not args.test:
-        dtu = DTU(dtuIpAddress)
+        dtu = DTU(args.dtu_ip_address)
         response = await dtu.async_get_real_data_new()
 
-        if args.debug: print(f"DTU Response:")
-        if args.debug: print(f"{response}")
+    # If test flag is set, load test data
+    if args.test:
+        try:
+            with open(testDataFile, 'r') as file:
+                response = json.load(file)
+        except (FileNotFoundError, PermissionError, OSError):
+            print('ERROR: Cannot open file response_test_data.json')
+            
+    print(f"Response:")
+    print(f"{response}")
+    
+    if response:
+        pv_data = response.get('pv_data', [])
 
-        if response:
-            # Panel 1 (pv_data[0])
-            pv_data_0 = response.pv_data[0]
-            power_0 = pv_data_0.power / 10.0
-            try:
-                energy_total_0 = pv_data_0.energy_total
-            except KeyError:
-                energy_total_0 = 0
-            energy_daily_0 = pv_data_0.energy_daily
-            #current_0 = pv_data_0.current / 10
-            # Panel 2 (pv_data[1])
-            pv_data_1 = response.pv_data[1]
-            power_1 = pv_data_1.power / 10.0
-            energy_total_1 = pv_data_1.energy_total
-            energy_daily_1 = pv_data_1.energy_daily
-            #current_1 = pv_data_1.current / 10
-
-            power = power_0 + power_1
-            energy_total = energy_total_0 + energy_total_1
-            energy_daily = energy_daily_0 + energy_daily_1
+        if not isinstance(pv_data, list):
+            # If the inverter has only a single input the pv data is not an array!
+            power = pv_data.get('power', 0) / 10.0
+            energy_total = pv_data.get('energy_total', 0)
+            energy_daily = pv_data.get('energy_daily', 0)
         else:
-            # Unable to get response!
             power = 0
             energy_total = 0
             energy_daily = 0
-            #current = 0
+
+            for pv in pv_data:
+                power += pv.get('power', 0) / 10.0
+                energy_total += pv.get('energy_total', 0)
+                energy_daily += pv.get('energy_daily', 0)
+    else:
+        # Unable to get response!
+        power = 0
+        energy_total = 0
+        energy_daily = 0
+        #current = 0
 
         print(f"power: {power}")
         print(f"energy_total: {energy_total}")
         print(f"energy_daily: {energy_daily}")
-
-    if args.test:
-        if args.debug: print(f"DEBUG: test run using dataset is {args.test}")
-        (def_result, power, energy_total, energy_daily) = parse_dtu_data(testDataFile)
-        if def_result != 0:
-            (power, energy_total, energy_daily) = (0, 0, 0, 0)
     
     (template, gauge_html) = createGaugeGraphic(power, energy_total, energy_daily)
 
@@ -263,6 +157,6 @@ def index():
 ####################
 
 if __name__ == '__main__':
-    html_content = app.run(debug=args.debug)
+    html_content = app.run()
     if html_content != 0:
         sys.exit("Exiting program due to error(s)")

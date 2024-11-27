@@ -20,15 +20,15 @@
       "modulationIndexSignal": 983288
     }
   ],
-  "pvData": [
+  "pv_data": [
     {
       "serialNumber": "22070012479999",
       "portNumber": 1,
       "voltage": 276,
       "current": 8,
       "power": 22,
-      "energyTotal": 27032,
-      "energyDaily": 1,
+      "energy_total": 27032,
+      "energy_daily": 1,
       "errorCode": 50921472
     },
     {
@@ -37,8 +37,8 @@
       "voltage": 345,
       "current": 456,
       "power": 1575,
-      "energyTotal": 32184,
-      "energyDaily": 101,
+      "energy_total": 32184,
+      "energy_daily": 101,
       "errorCode": 50331648
     }
   ],
