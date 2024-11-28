@@ -85,7 +85,7 @@ def createGaugeGraphic(power, energy_total, energy_daily):
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>DTU Data</title>
     </head>
-    <body>
+    <body">
         <div>
             {{ gauge_html | safe }} 
         </div>
@@ -96,50 +96,32 @@ def createGaugeGraphic(power, energy_total, energy_daily):
     return (template, gauge_html)
 
 async def get_dtu_data():
-    # Get data from the DTU
+    response = None
     if not args.test:
-        dtu = DTU(args.dtu_ip_address)
+        print(f"Getting data from DTU with IP address: {args.dtu_ip_address}")
+        dtu = DTU(str(args.dtu_ip_address))  # Convert IPv4Address to string
         response = await dtu.async_get_real_data_new()
 
-    # If test flag is set, load test data
     if args.test:
         try:
             with open(testDataFile, 'r') as file:
                 response = json.load(file)
         except (FileNotFoundError, PermissionError, OSError):
             print('ERROR: Cannot open file response_test_data.json')
-            
-    print(f"Response:")
-    print(f"{response}")
+            return None
+
+    print(f"Response: {response}")
+
+    power = 0
+    energy_total = 0
+    energy_daily = 0
     
-    if response:
-        pv_data = response.get('pv_data', [])
+    if response :
+        pv_data = response.pv_data
+        power = response.dtu_power / 10.0
+        energy_total = pv_data[0].energy_total
+        energy_daily = response.dtu_daily_energy
 
-        if not isinstance(pv_data, list):
-            # If the inverter has only a single input the pv data is not an array!
-            power = pv_data.get('power', 0) / 10.0
-            energy_total = pv_data.get('energy_total', 0)
-            energy_daily = pv_data.get('energy_daily', 0)
-        else:
-            power = 0
-            energy_total = 0
-            energy_daily = 0
-
-            for pv in pv_data:
-                power += pv.get('power', 0) / 10.0
-                energy_total += pv.get('energy_total', 0)
-                energy_daily += pv.get('energy_daily', 0)
-    else:
-        # Unable to get response!
-        power = 0
-        energy_total = 0
-        energy_daily = 0
-        #current = 0
-
-        print(f"power: {power}")
-        print(f"energy_total: {energy_total}")
-        print(f"energy_daily: {energy_daily}")
-    
     (template, gauge_html) = createGaugeGraphic(power, energy_total, energy_daily)
 
     # Render the HTML with the gauge graphic and energy total

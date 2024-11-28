@@ -18,8 +18,10 @@ Test environment:
 
 ## TODO:
 - get rid of external shell script
-- change pv_data to dtu date for combined output of inverter
+- ~~change pv_data to dtu date for combined output of inverter~~
 - add config options for DTU IP, PV-Power Range, Positioning, Size, Colors...
+- save last response into local file
+- save max power and use it as 'threshold'
 - ~~add template if inverter is offline (currently only displays a text)~~
 
 ## Installation
