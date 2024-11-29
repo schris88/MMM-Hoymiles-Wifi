@@ -99,6 +99,13 @@ To turn on testing:
 ```
 python hoymiles_data.py --dtu_ip_address <DTU_HOST_IP> --test
 ```
+
+### Run a local MongoDB database with Docker
+To run a local MongoDB database, use the following command:
+```shell
+docker run -d -p 27017:27017 --name mongodb mongo:latest
+```
+
 ## Start Flask server by running HoymilesWifi.sh or add it to pm2
 To start `HoymilesWifi.sh` manually:
 ```shell
@@ -110,7 +117,6 @@ To add `HoymilesWifi.sh` to pm2:
 pm2 start HoymilesWifi.sh
 pm2 save
 ```
-
 ## Various checks
 ### Verify hoymiles-wifi command:
 ```shell
@@ -129,7 +135,7 @@ pm2 info HoymilesWifi
 ```
 ### Check the HoymilesWifi log:
 ```shell
-pm2 logs HoymilesWifi --lines 100
+pm2 logs
 ```
 ### Make a test run, using a test dataset
 Use you favorite editor to make the change (here nano).
