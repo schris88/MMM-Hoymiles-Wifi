@@ -2,3 +2,4 @@ Flask
 hoymiles-wifi
 plotly
 jinja2
+pymongo

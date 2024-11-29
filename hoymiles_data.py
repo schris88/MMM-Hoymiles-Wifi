@@ -7,6 +7,8 @@ import asyncio
 from flask import Flask, render_template_string
 import plotly.graph_objects as go
 from jinja2 import Template
+from pymongo import MongoClient
+from datetime import datetime
 
 #####################
 # ***** ARGS ****** #
@@ -20,6 +22,10 @@ parser.add_argument('--dtu_ip_address', default = '192.168.178.123', type=ip_add
 parser.add_argument('--max', default = '100', type=int , required=True, help = "Max power your gauge should show")
 parser.add_argument('--test', action = "store_true", default=False, required=False, help = "use a test dataset")
 
+# Initialize MongoDB client
+client = MongoClient('localhost', 27017)
+db = client['hoymiles']
+collection = db['energy_data']
 args = parser.parse_args()
 
 ####################
@@ -34,16 +40,21 @@ app = Flask(__name__)
 # ***** DEFS ***** #
 ####################
 
-def createGaugeGraphic(power, energy_total, energy_daily):
+def createGaugeGraphic(power, energy_total, energy_daily, maxPower):
+    # Create gauge graphic
     fig = go.Figure(go.Indicator(
         mode="gauge+number",
         value=power,
-        number={'suffix': " W",'valueformat': '.1f', 'font': {'size': 24}}, # Format the number to one decimal place
+        number={'suffix': " W",'valueformat': '.1f', 'font': {'size': 22}},  # Format the number to one decimal place
         gauge={'axis': {'range': [0, args.max], 'tickcolor': 'white', 'tickfont': {'color': 'white'}},
-               'bar': {'color': 'white'},
-               'bgcolor': 'black',
-               'borderwidth': 2,
-               'bordercolor': 'white'},
+                'bar': {'color': 'blue'},
+                'threshold': {
+                    'line': {'color': 'red', 'width': 4},
+                    'thickness': 0.75,
+                    'value': maxPower},
+                'bgcolor': 'black',
+                'borderwidth': 2,
+                'bordercolor': 'white'},
         domain={'x': [0, 1], 'y': [0.8, 1]}  # Adjust vertical positioning
     ))
 
@@ -51,7 +62,7 @@ def createGaugeGraphic(power, energy_total, energy_daily):
     fig.add_trace(go.Indicator(
         mode="number",
         value=energy_daily,
-        title={'text': "Today", 'font': {'color': 'white', 'size': 16}},
+        title={'text': "Heute", 'font': {'color': 'white', 'size': 16}},
         number={'suffix': " Wh", 'font': {'size': 12}},
         domain={'x': [0.2, 0.4], 'y': [0.65, 0.75]}  # Adjust vertical positioning
     ))
@@ -60,11 +71,11 @@ def createGaugeGraphic(power, energy_total, energy_daily):
     fig.add_trace(go.Indicator(
         mode="number",
         value=energy_total,
-        title={'text': "Total", 'font': {'color': 'white', 'size': 16}},
+        title={'text': "Gesamt", 'font': {'color': 'white', 'size': 16}},
         number={'suffix': " Wh", 'font': {'size': 12}},
         domain={'x': [0.6, 0.8], 'y': [0.65, 0.75]}  # Adjust vertical positioning
     ))
-    
+
     # Update layout
     fig.update_layout(
         paper_bgcolor="rgba(0,0,0,0)",
@@ -85,7 +96,7 @@ def createGaugeGraphic(power, energy_total, energy_daily):
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>DTU Data</title>
     </head>
-    <body">
+    <body style="background:black">
         <div>
             {{ gauge_html | safe }} 
         </div>
@@ -115,6 +126,7 @@ async def get_dtu_data():
     power = 0
     energy_total = 0
     energy_daily = 0
+    maxPower = 0
     
     if response :
         pv_data = response.pv_data
@@ -122,10 +134,28 @@ async def get_dtu_data():
         energy_total = pv_data[0].energy_total
         energy_daily = response.dtu_daily_energy
 
-    (template, gauge_html) = createGaugeGraphic(power, energy_total, energy_daily)
+    # Get latest db entry
+    latest_entry = collection.find_one(sort=[('timestamp', -1)])
+    # if latest_enty not null
+    if latest_entry:
+        dbMaxPower = latest_entry['maxPower']
+        if power > dbMaxPower and latest_entry['timestamp'].date() == datetime.now().date():
+            maxPower = power
+
+    # Insert data into MongoDB
+    data = {
+        'maxPower': maxPower,
+        'power': power,
+        'energy_total': energy_total,
+        'energy_daily': energy_daily,
+        'timestamp': datetime.now()
+    }
+    collection.insert_one(data)
+
+    (template, gauge_html) = createGaugeGraphic(power, energy_total, energy_daily, maxPower)
 
     # Render the HTML with the gauge graphic and energy total
-    html_content = template.render(gauge_html=gauge_html, energy_total=energy_total, energy_daily=energy_daily)
+    html_content = template.render(gauge_html=gauge_html, energy_total=energy_total, energy_daily=energy_daily, maxPower=maxPower)
 
     return html_content
 
