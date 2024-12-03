@@ -1,47 +1,35 @@
 {
-  "deviceSerialNumber": "414393419999",
-  "timestamp": 1731749175,
+  "deviceSerialNumber": "12342423SDAS",
+  "timestamp": 1733215626,
   "activePower": 1,
   "firmwareVersion": 1,
   "sgsData": [
     {
-      "serialNumber": "22070012479999",
+      "serialNumber": "123456789",
       "firmwareVersion": 1,
-      "voltage": 2343,
-      "frequency": 5001,
-      "activePower": 1513,
-      "reactivePower": 86,
-      "current": 67,
-      "powerFactor": 998,
-      "temperature": 93,
-      "warningNumber": 4,
-      "crcChecksum": 28864,
+      "voltage": 2338,
+      "frequency": 5000,
+      "activePower": 40,
+      "current": 1,
+      "powerFactor": 1000,
+      "temperature": 102,
+      "warningNumber": 5,
       "linkStatus": 1,
-      "modulationIndexSignal": 983288
+      "modulationIndexSignal": 13828288
     }
   ],
-  "pv_data": [
+  "pvData": [
     {
-      "serialNumber": "22070012479999",
+      "serialNumber": "123456789",
       "portNumber": 1,
-      "voltage": 276,
+      "voltage": 494,
       "current": 8,
-      "power": 22,
-      "energy_total": 27032,
-      "energy_daily": 1,
+      "power": 42,
+      "energyTotal": 3028,
+      "energyDaily": 1,
       "errorCode": 50921472
-    },
-    {
-      "serialNumber": "22070012479999",
-      "portNumber": 2,
-      "voltage": 345,
-      "current": 456,
-      "power": 1575,
-      "energy_total": 32184,
-      "energy_daily": 101,
-      "errorCode": 50331648
     }
   ],
-  "dtuPower": "1513",
-  "dtuDailyEnergy": "102"
+  "dtuPower": "40",
+  "dtuDailyEnergy": "1"
 }
