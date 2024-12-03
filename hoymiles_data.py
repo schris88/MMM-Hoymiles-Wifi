@@ -139,8 +139,10 @@ async def get_dtu_data():
     # if latest_enty not null
     if latest_entry:
         dbMaxPower = latest_entry['maxPower']
-        if power > dbMaxPower and latest_entry['timestamp'].date() == datetime.now().date():
+        if power > dbMaxPower:
             maxPower = power
+        else:
+            maxPower = dbMaxPower
 
     # Insert data into MongoDB
     data = {

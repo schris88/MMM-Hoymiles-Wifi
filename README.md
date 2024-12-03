@@ -17,11 +17,12 @@ Test environment:
 - Raspbian GNU/Linux 12 (bookworm)
 
 ## TODO:
+- use parameters instead of sh config to send parameters from mm config to flask server
 - get rid of external shell script
 - ~~change pv_data to dtu date for combined output of inverter~~
 - add config options for DTU IP, PV-Power Range, Positioning, Size, Colors...
-- save last response into local file
-- save max power and use it as 'threshold'
+- ~~save last response into local file~~
+- ~~save max power and use it as 'threshold'~~
 - ~~add template if inverter is offline (currently only displays a text)~~
 
 ## Installation
