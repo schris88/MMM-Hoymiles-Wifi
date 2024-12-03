@@ -101,7 +101,7 @@ python hoymiles_data.py --dtu_ip_address <DTU_HOST_IP> --test
 ```
 
 ### Run a local MongoDB database with Docker
-To run a local MongoDB database, use the following command:
+To install a local MongoDB database, use the following command:
 ```shell
 docker run -d -p 27017:27017 --name mongodb mongo:latest
 ```
