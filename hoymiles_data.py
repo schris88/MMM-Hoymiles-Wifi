@@ -123,10 +123,17 @@ async def get_dtu_data():
 
     print(f"Response: {response}")
 
+    # Get latest db entry
+    latest_entry = collection.find_one(sort=[('timestamp', -1)])
+
     power = 0
     energy_total = 0
     energy_daily = 0
     maxPower = 0
+    
+    if latest_entry:
+        energy_total = latest_entry['energy_total']
+        energy_daily = latest_entry['energy_daily']
     
     if response :
         pv_data = response.pv_data
@@ -134,25 +141,23 @@ async def get_dtu_data():
         energy_total = pv_data[0].energy_total
         energy_daily = pv_data[0].energy_daily
 
-    # Get latest db entry
-    latest_entry = collection.find_one(sort=[('timestamp', -1)])
-    # if latest_enty not null
-    if latest_entry:
-        dbMaxPower = latest_entry['maxPower']
-        if power > dbMaxPower:
-            maxPower = power
-        else:
-            maxPower = dbMaxPower
+        # if latest_enty not null
+        if latest_entry:
+            dbMaxPower = latest_entry['maxPower']
+            if power > dbMaxPower:
+                maxPower = power
+            else:
+                maxPower = dbMaxPower
 
-    # Insert data into MongoDB
-    data = {
-        'maxPower': maxPower,
-        'power': power,
-        'energy_total': energy_total,
-        'energy_daily': energy_daily,
-        'timestamp': datetime.now()
-    }
-    collection.insert_one(data)
+        # Insert data into MongoDB
+        data = {
+            'maxPower': maxPower,
+            'power': power,
+            'energy_total': energy_total,
+            'energy_daily': energy_daily,
+            'timestamp': datetime.now()
+        }
+        collection.insert_one(data)
 
     (template, gauge_html) = createGaugeGraphic(power, energy_total, energy_daily, maxPower)
 
