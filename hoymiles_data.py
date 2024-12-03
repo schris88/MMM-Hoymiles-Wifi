@@ -96,7 +96,7 @@ def createGaugeGraphic(power, energy_total, energy_daily, maxPower):
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>DTU Data</title>
     </head>
-    <body style="background:black">
+    <body>
         <div>
             {{ gauge_html | safe }} 
         </div>
@@ -130,9 +130,9 @@ async def get_dtu_data():
     
     if response :
         pv_data = response.pv_data
-        power = response.dtu_power / 10.0
+        power = pv_data[0].power / 10.0
         energy_total = pv_data[0].energy_total
-        energy_daily = response.dtu_daily_energy
+        energy_daily = pv_data[0].energy_daily
 
     # Get latest db entry
     latest_entry = collection.find_one(sort=[('timestamp', -1)])
