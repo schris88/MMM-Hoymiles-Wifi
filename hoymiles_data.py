@@ -134,6 +134,7 @@ async def get_dtu_data():
     if latest_entry:
         energy_total = latest_entry['energy_total']
         energy_daily = latest_entry['energy_daily']
+        maxPower = latest_entry['maxPower']
     
     if response :
         pv_data = response.pv_data
