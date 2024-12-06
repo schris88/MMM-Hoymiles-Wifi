@@ -8,7 +8,7 @@ from flask import Flask, render_template_string
 import plotly.graph_objects as go
 from jinja2 import Template
 from pymongo import MongoClient
-from datetime import datetime
+from datetime import datetime, timedelta
 
 #####################
 # ***** ARGS ****** #
@@ -40,7 +40,7 @@ app = Flask(__name__)
 # ***** DEFS ***** #
 ####################
 
-def createGaugeGraphic(power, energy_total, energy_daily, maxPower):
+def createGaugeGraphic(power, energy_total, energy_daily, maxPower, day_label):
     # Create gauge graphic
     fig = go.Figure(go.Indicator(
         mode="gauge+number",
@@ -62,7 +62,7 @@ def createGaugeGraphic(power, energy_total, energy_daily, maxPower):
     fig.add_trace(go.Indicator(
         mode="number",
         value=energy_daily,
-        title={'text': "Heute", 'font': {'color': 'white', 'size': 16}},
+        title={'text': day_label, 'font': {'color': 'white', 'size': 16}},
         number={'suffix': " Wh", 'font': {'size': 12}},
         domain={'x': [0.2, 0.4], 'y': [0.65, 0.75]}  # Adjust vertical positioning
     ))
@@ -130,11 +130,20 @@ async def get_dtu_data():
     energy_total = 0
     energy_daily = 0
     maxPower = 0
+    day_label = "Heute"
+    # Compare latest_entry timestamp with current day
+    latest_entry_date = latest_entry['timestamp'].date()
+    current_date = datetime.now().date()
     
     if latest_entry:
         energy_total = latest_entry['energy_total']
         energy_daily = latest_entry['energy_daily']
         maxPower = latest_entry['maxPower']
+        
+        if latest_entry_date == current_date - timedelta(days=1):
+            day_label = "Gestern"
+        else:
+            day_label = "Heute"
     
     if response :
         pv_data = response.pv_data
@@ -144,6 +153,9 @@ async def get_dtu_data():
 
         # if latest_enty not null
         if latest_entry:
+            if latest_entry_date < current_date:
+                # Drop the energy_data collection if the latest entry is not from today
+                collection.drop()
             dbMaxPower = latest_entry['maxPower']
             if power > dbMaxPower:
                 maxPower = power
@@ -160,10 +172,10 @@ async def get_dtu_data():
         }
         collection.insert_one(data)
 
-    (template, gauge_html) = createGaugeGraphic(power, energy_total, energy_daily, maxPower)
+    (template, gauge_html) = createGaugeGraphic(power, energy_total, energy_daily, maxPower, day_label)
 
     # Render the HTML with the gauge graphic and energy total
-    html_content = template.render(gauge_html=gauge_html, energy_total=energy_total, energy_daily=energy_daily, maxPower=maxPower)
+    html_content = template.render(gauge_html=gauge_html)
 
     return html_content
 
