@@ -132,7 +132,7 @@ async def get_dtu_data():
     maxPower = 0
     day_label = "Heute"
     # Compare latest_entry timestamp with current day
-    latest_entry_date = latest_entry['timestamp'].date()
+    latest_entry_date = latest_entry['timestamp'].date() if latest_entry and 'timestamp' in latest_entry else None
     current_date = datetime.now().date()
     
     if latest_entry:
@@ -147,30 +147,35 @@ async def get_dtu_data():
     
     if response :
         pv_data = response.pv_data
-        power = pv_data[0].power / 10.0
-        energy_total = pv_data[0].energy_total
-        energy_daily = pv_data[0].energy_daily
+        # Sum up values from all PV devices
+        for pv in pv_data:
+            power += pv.power / 10.0
+            energy_total += pv.energy_total
+            energy_daily += pv.energy_daily
 
-        # if latest_enty not null
-        if latest_entry:
-            if latest_entry_date < current_date:
-                # Drop the energy_data collection if the latest entry is not from today
-                collection.drop()
-            dbMaxPower = latest_entry['maxPower']
-            if power > dbMaxPower:
-                maxPower = power
-            else:
-                maxPower = dbMaxPower
+        # Handle maxPower logic
+    if latest_entry:
+        latest_entry_date = latest_entry['timestamp'].date()
+        if latest_entry_date < current_date:
+            # New day - drop collection and reset maxPower
+            collection.delete_many({})
+            maxPower = power
+        else:
+            # Same day - compare with stored maxPower
+            maxPower = max(power, latest_entry['maxPower'])
+    else:
+        # No previous entry - use current power
+        maxPower = power
 
-        # Insert data into MongoDB
-        data = {
-            'maxPower': maxPower,
-            'power': power,
-            'energy_total': energy_total,
-            'energy_daily': energy_daily,
-            'timestamp': datetime.now()
-        }
-        collection.insert_one(data)
+    # Insert data into MongoDB
+    data = {
+        'maxPower': maxPower,
+        'power': power,
+        'energy_total': energy_total,
+        'energy_daily': energy_daily,
+        'timestamp': datetime.now()
+    }
+    collection.insert_one(data)
 
     (template, gauge_html) = createGaugeGraphic(power, energy_total, energy_daily, maxPower, day_label)
 
