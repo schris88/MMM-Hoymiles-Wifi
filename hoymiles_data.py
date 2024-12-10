@@ -150,8 +150,8 @@ async def get_dtu_data():
         # Sum up values from all PV devices
         for pv in pv_data:
             power += pv.power / 10.0
-            energy_total += pv.energy_total
-            energy_daily += pv.energy_daily
+            energy_total = pv.energy_total
+            energy_daily = pv.energy_daily
 
         # Handle maxPower logic
     if latest_entry:
