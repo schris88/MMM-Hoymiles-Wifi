@@ -5,6 +5,7 @@ MagicMirror module for Hoymiles Wifi inverter info
 - Project is based on https://github.com/ulrichwisser/MMM-HTMLSnippet
 - The Inverter Data is fetched with https://github.com/suaveolent/hoymiles-wifi
 - Whenever the widget refreshes, the flask server will call the python script which will render a html with the current data from holymiles-wifi
+- THERE IS A SECOND BRANCH "mongodb-history" which tracks data and uses them to handle response when inverter is offline
 
 ## Project Status
 This module is still under development.<br>
@@ -13,15 +14,15 @@ It might not work, can show incorrect results, will lack some counters, etc.
 Test environment:
 - Micro Inverter: Hoymiles HMS-800W-2T and HMS-400W-2T with 2 panels connected
 - MagicMirror version: 2.30.0-develop
-- Raspberry Pi 4 Model B Rev 1.5
+- Raspberry Pi 4 Model B Rev 1.5 & Raspberry Pi 5
 - Raspbian GNU/Linux 12 (bookworm)
 
 ## TODO:
 - get rid of external shell script
 - ~~change pv_data to dtu date for combined output of inverter~~
 - add config options for DTU IP, PV-Power Range, Positioning, Size, Colors...
-- save last response into local file
-- save max power and use it as 'threshold'
+- ~~save last response into local file~~
+- ~~save max power and use it as 'threshold'~~
 - ~~add template if inverter is offline (currently only displays a text)~~
 
 ## Installation
