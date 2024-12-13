@@ -126,10 +126,10 @@ async def get_dtu_data():
     # Get latest db entry
     latest_entry = collection.find_one(sort=[('timestamp', -1)])
 
-    power = 0
-    energy_total = 0
-    energy_daily = 0
-    maxPower = 0
+    power = 0.0
+    energy_total = 0.0
+    energy_daily = 0.0
+    maxPower = 0.0
     day_label = "Heute"
     # Compare latest_entry timestamp with current day
     latest_entry_date = latest_entry['timestamp'].date() if latest_entry and 'timestamp' in latest_entry else None
@@ -141,7 +141,8 @@ async def get_dtu_data():
         maxPower = latest_entry['maxPower']
         
         if latest_entry_date == current_date - timedelta(days=1):
-            day_label = "Gestern"
+            # as date in dd.MM.YYYY format
+            day_label = latest_entry['timestamp'].strftime("%d.%m.%Y")
         else:
             day_label = "Heute"
     
